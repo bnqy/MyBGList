@@ -1,6 +1,10 @@
-﻿namespace MyBGList
+﻿namespace MyBGList;
+
+public class BoardGame
 {
-	public class BoardGame
-	{
-	}
+	public int Id { get; set; }
+
+	public string? Name { get; set; }
+
+	public int? Year { get; set; }
 }
