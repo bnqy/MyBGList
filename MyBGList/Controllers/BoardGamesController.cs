@@ -19,27 +19,27 @@ namespace MyBGList.Controllers
 		[HttpGet(Name = "GetBoardGames")]
 		public IEnumerable<BoardGame> Get()
 		{
-			return new[]
-			{
-				new BoardGame()
-				{
+			return new[] {
+				new BoardGame() {
 					Id = 1,
-					Name = "Dua Lipa",
-					Year = 1995
+					Name = "Axis & Allies",
+					Year = 1981,
+					MinPlayers = 2,
+					MaxPlayers = 5
 				},
-
-				new BoardGame()
-				{
+				new BoardGame() {
 					Id = 2,
-					Name = "Bene Om",
-					Year = 2003
+					Name = "Citadels",
+					Year = 2000,
+					MinPlayers = 2,
+					MaxPlayers = 8
 				},
-
-				new BoardGame()
-				{
+				new BoardGame() {
 					Id = 3,
-					Name = "Lana Del Rey",
-					Year = 1985
+					Name = "Terraforming Mars",
+					Year = 2016,
+					MinPlayers = 1,
+					MaxPlayers = 5
 				}
 			};
 		}
