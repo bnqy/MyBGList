@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyBGList.DTO;
 using System.Data.SqlTypes;
 
 namespace MyBGList.Controllers
@@ -18,10 +19,13 @@ namespace MyBGList.Controllers
 
 		[HttpGet(Name = "GetBoardGames")]
 		[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
-		public IEnumerable<BoardGame> Get()
+		public RestDTO<BoardGame[]> Get()
 		{
-			return new[] {
-				new BoardGame() {
+			return new RestDTO<BoardGame[]>() 
+			{
+				Data = new BoardGame[]
+				{
+					new BoardGame() {
 					Id = 1,
 					Name = "Axis & Allies",
 					Year = 1981,
@@ -41,6 +45,13 @@ namespace MyBGList.Controllers
 					Year = 2016,
 					MinPlayers = 1,
 					MaxPlayers = 5
+				} },
+
+				Links = new List<LinkDTO>
+				{
+					new LinkDTO(Url.Action(null, "BoardGames", null, Request.Scheme)!,
+					"self",
+					"GET")
 				}
 			};
 		}

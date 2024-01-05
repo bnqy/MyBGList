@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,9 +46,28 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthorization();
 
-app.MapGet("/error", [EnableCors("AnyOrigin")] () => Results.Problem());
+app.MapGet("/error", 
+	[EnableCors("AnyOrigin")]
+	[ResponseCache(NoStore = true)] () => 
+	Results.Problem());
 
-app.MapGet("/error/test", [EnableCors("AnyOrigin")] () => { throw new Exception("test"); });
+app.MapGet("/error/test", 
+	[EnableCors("AnyOrigin")]
+	[ResponseCache(NoStore = true)] () => 
+	{ throw new Exception("test"); });
+
+app.MapGet("/cod/test",
+	[EnableCors("AnyOrigin")]
+	[ResponseCache(NoStore = true)] () =>
+	Results.Text("<script>" +
+	"window.alert('Your client supports JavaScript!" +
+	"\\r\\n\\r\\n" +
+	$"Server time (UTC): {DateTime.UtcNow.ToString("o")}" +
+	"\\r\\n" +
+	"Client time (UTC): ' + new Date().toISOString());" +
+	"</script>" +
+	"<noscript>Your client does not support JavaScript</noscript>",
+	"text/html"));
 
 app.MapControllers()
 	.RequireCors("AnyOrigin");
