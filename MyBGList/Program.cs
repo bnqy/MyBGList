@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Cors;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -40,12 +42,14 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthorization();
 
-app.MapGet("/error", () => Results.Problem());
-app.MapGet("/error/test", () => { throw new Exception("test"); });
+app.MapGet("/error", [EnableCors("AnyOrigin")] () => Results.Problem());
 
-app.MapControllers();
+app.MapGet("/error/test", [EnableCors("AnyOrigin")] () => { throw new Exception("test"); });
+
+app.MapControllers()
+	.RequireCors("AnyOrigin");
 
 app.Run();
