@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyBGList.DTO;
 using System.Data.SqlTypes;
+using MyBGList.Models;
 
 namespace MyBGList.Controllers
 {
