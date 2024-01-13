@@ -20,5 +20,5 @@ public class Domain
 	[Required]
 	public DateTime LastModifiedDate { get; set; }
 
-	//public ICollection<BoardGames_Domains>? BoardGames_Domains { get; set; }
+	public ICollection<BoardGames_Domains>? BoardGames_Domains { get; set; }
 }
