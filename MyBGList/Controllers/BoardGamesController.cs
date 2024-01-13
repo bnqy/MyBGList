@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyBGList.DTO;
 using System.Data.SqlTypes;
+using Microsoft.EntityFrameworkCore;
 using MyBGList.Models;
 
 namespace MyBGList.Controllers
@@ -11,48 +12,30 @@ namespace MyBGList.Controllers
 	[ApiController]
 	public class BoardGamesController : ControllerBase
 	{
+		private readonly ApplicationDbContext _context;
 		private readonly ILogger<BoardGamesController> _logger;
 
-		public BoardGamesController(ILogger<BoardGamesController> logger)
+		public BoardGamesController(ApplicationDbContext context,
+			ILogger<BoardGamesController> logger)
 		{
+			_context = context;
 			_logger = logger;
 		}
 
 		[HttpGet(Name = "GetBoardGames")]
 		[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
-		public RestDTO<BoardGame[]> Get()
+		public async Task<RestDTO<BoardGame[]>> Get()
 		{
+			var query = _context.BoardGames;
 			return new RestDTO<BoardGame[]>() 
 			{
-				Data = new BoardGame[]
+				Data = await query.ToArrayAsync(),
+				Links = new List<LinkDTO> 
 				{
-					new BoardGame() {
-					Id = 1,
-					Name = "Axis & Allies",
-					Year = 1981,
-					MinPlayers = 2,
-					MaxPlayers = 5
-				},
-				new BoardGame() {
-					Id = 2,
-					Name = "Citadels",
-					Year = 2000,
-					MinPlayers = 2,
-					MaxPlayers = 8
-				},
-				new BoardGame() {
-					Id = 3,
-					Name = "Terraforming Mars",
-					Year = 2016,
-					MinPlayers = 1,
-					MaxPlayers = 5
-				} },
-
-				Links = new List<LinkDTO>
-				{
-					new LinkDTO(Url.Action(null, "BoardGames", null, Request.Scheme)!,
-					"self",
-					"GET")
+					new LinkDTO(
+						Url.Action(null, "BoardGames", null, Request.Scheme)!,
+						"self",
+						"GET"), 
 				}
 			};
 		}
