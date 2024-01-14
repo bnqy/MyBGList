@@ -133,7 +133,11 @@ namespace MyBGList.Controllers
 			}
 
 			//save
+			using var transaction = _context.Database.BeginTransaction();
+			_context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT BoardGames ON");
 			await _context.SaveChangesAsync();
+			_context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT BoardGames OFF");
+			transaction.Commit();
 
 			//recap
 			return new JsonResult(new
