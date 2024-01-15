@@ -28,7 +28,7 @@ public class BoardGamesController : ControllerBase
 	[HttpGet(Name = "GetBoardGames")]
 	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	public async Task<RestDTO<BoardGame[]>> Get(int pageIndex = 0, 
-		int pageSize = 10, 
+		[Range(1, 100)]int pageSize = 10, 
 		[SortColumnValidator(typeof(BoardGameDTO))] string? sortColumn = "Name",
 		[SortOrderValidator] string? sortOrder = "ASC",
 		string? filterQuery = null)
