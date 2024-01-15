@@ -24,7 +24,5 @@ public class SortOrderFilter : IParameterFilter
 				);
 			}
 		}
-
-		throw new NotImplementedException();
 	}
 }
