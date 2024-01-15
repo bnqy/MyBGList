@@ -5,6 +5,7 @@ using System.Data.SqlTypes;
 using Microsoft.EntityFrameworkCore;
 using MyBGList.Models;
 using System.Linq.Dynamic.Core;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyBGList.Controllers;
 
@@ -28,7 +29,7 @@ public class BoardGamesController : ControllerBase
 	public async Task<RestDTO<BoardGame[]>> Get(int pageIndex = 0, 
 		int pageSize = 10, 
 		string? sortColumn = "Name",
-		string? sortOrder = "ASC",
+		[RegularExpression("ASC|DESC")] string? sortOrder = "ASC",
 		string? filterQuery = null)
 	{
 		var query = _context.BoardGames.AsQueryable();
