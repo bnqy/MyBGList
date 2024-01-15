@@ -29,7 +29,7 @@ public class BoardGamesController : ControllerBase
 	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	public async Task<RestDTO<BoardGame[]>> Get(int pageIndex = 0, 
 		int pageSize = 10, 
-		string? sortColumn = "Name",
+		[SortColumnValidator(typeof(BoardGameDTO))] string? sortColumn = "Name",
 		[SortOrderValidator] string? sortOrder = "ASC",
 		string? filterQuery = null)
 	{
