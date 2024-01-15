@@ -1,6 +1,30 @@
-﻿namespace MyBGList.Swagger
+﻿using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Any;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using MyBGList.Attributes;
+using System;
+
+namespace MyBGList.Swagger;
+
+public class SortOrderFilter : IParameterFilter
 {
-	public class SortOrderFilter
+	public void Apply(OpenApiParameter parameter, ParameterFilterContext context)
 	{
+		var attributes = context.ParameterInfo?
+			.GetCustomAttributes(true)
+			.OfType<SortOrderValidatorAttribute>();
+
+		if (attributes != null)
+		{
+			foreach (var attribute in attributes)
+			{
+				parameter.Schema.Extensions.Add(
+					"pattern",
+					new OpenApiString(string.Join("|", attribute.AllowedValues.Select(v => $"^{v}$")))
+				);
+			}
+		}
+
+		throw new NotImplementedException();
 	}
 }
