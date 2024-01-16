@@ -25,7 +25,7 @@ public class BoardGamesController : ControllerBase
 		_logger = logger;
 	}
 
-	[HttpGet(Name = "GetBoardGames")]
+	/*[HttpGet(Name = "GetBoardGames")]
 	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	public async Task<RestDTO<BoardGame[]>> Get(int pageIndex = 0, 
 		[Range(1, 100)]int pageSize = 10, 
@@ -59,6 +59,40 @@ public class BoardGamesController : ControllerBase
 					Request.Scheme)!,
 					"self",
 					"GET"), 
+			}
+		};
+	}*/
+
+	[HttpGet(Name = "GetBoardGames")]
+	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
+	public async Task<RestDTO<BoardGame[]>> Get([FromQuery] RequestDTO input)
+	{
+		var query = _context.BoardGames.AsQueryable();
+		if (!string.IsNullOrEmpty(input.FilterQuery))
+			query = query.Where(b => b.Name.Contains(input.FilterQuery));
+
+		var recordCount = await query.CountAsync();
+
+		query = query
+			.OrderBy($"{input.SortColumn} {input.SortOrder}")
+			.Skip(input.PageIndex * input.PageSize)
+			.Take(input.PageSize);
+
+		return new RestDTO<BoardGame[]>()
+		{
+			Data = await query.ToArrayAsync(),
+			PageIndex = input.PageIndex,
+			PageSize = input.PageSize,
+			RecordCount = recordCount,
+			Links = new List<LinkDTO>
+			{
+				new LinkDTO(
+					Url.Action(null,
+					"BoardGames",
+					new { input.PageIndex, input.PageSize },
+					Request.Scheme)!,
+					"self",
+					"GET"),
 			}
 		};
 	}
