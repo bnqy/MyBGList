@@ -46,6 +46,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		builder.Configuration.GetConnectionString("DefaultConnection"))
 	);
 
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
