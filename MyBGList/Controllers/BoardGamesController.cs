@@ -67,6 +67,8 @@ public class BoardGamesController : ControllerBase
 	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	public async Task<RestDTO<BoardGame[]>> Get([FromQuery] RequestDTO<BoardGameDTO> input)
 	{
+		_logger.LogInformation("GET method started!");
+
 		var query = _context.BoardGames.AsQueryable();
 		if (!string.IsNullOrEmpty(input.FilterQuery))
 			query = query.Where(b => b.Name.Contains(input.FilterQuery));
