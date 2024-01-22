@@ -7,6 +7,7 @@ using MyBGList.Models;
 using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
 using MyBGList.Attributes;
+using MyBGList.Constants;
 
 namespace MyBGList.Controllers;
 
@@ -67,7 +68,7 @@ public class BoardGamesController : ControllerBase
 	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	public async Task<RestDTO<BoardGame[]>> Get([FromQuery] RequestDTO<BoardGameDTO> input)
 	{
-		_logger.LogInformation("GET method started!");
+		_logger.LogInformation(CustomLogEvents.BoardGamesController_Get, "GET method started!");
 
 		var query = _context.BoardGames.AsQueryable();
 		if (!string.IsNullOrEmpty(input.FilterQuery))
