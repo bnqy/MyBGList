@@ -11,7 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging
  .ClearProviders()
  .AddSimpleConsole()
- .AddDebug();
+ .AddDebug()
+ .AddApplicationInsights(telemetry => telemetry.ConnectionString =
+ builder.Configuration["Azure:ApplicationInsights:ConnectionString"],
+ loggerOptions => { });
 
 // Add services to the container.
 
