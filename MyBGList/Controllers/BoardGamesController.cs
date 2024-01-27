@@ -102,7 +102,8 @@ public class BoardGamesController : ControllerBase
 	}
 
 	[HttpPost(Name = "UpdateBoardGame")]
-	[ResponseCache(NoStore = true)]
+	//[ResponseCache(NoStore = true)]
+	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<RestDTO<BoardGame?>> Post(BoardGameDTO model)
 	{
 		var boardgame = await _context.BoardGames
@@ -138,7 +139,8 @@ public class BoardGamesController : ControllerBase
 	}
 
 	[HttpDelete(Name ="DeleteBoardGame")]
-	[ResponseCache(NoStore = true)]
+	//[ResponseCache(NoStore = true)]
+	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<RestDTO<BoardGame?>> Delete(int id)
 	{
 		var boardgame = await _context.BoardGames
