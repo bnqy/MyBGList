@@ -65,7 +65,8 @@ public class BoardGamesController : ControllerBase
 	}*/
 
 	[HttpGet(Name = "GetBoardGames")]
-	[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
+	//[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
+	[ResponseCache(CacheProfileName = "Any-60")]
 	public async Task<RestDTO<BoardGame[]>> Get([FromQuery] RequestDTO<BoardGameDTO> input)
 	{
 		_logger.LogInformation(CustomLogEvents.BoardGamesController_Get, "GET method started!");

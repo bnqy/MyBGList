@@ -64,6 +64,16 @@ builder.Services.AddControllers(options =>
 		(x, y) => $"The value '{x}' is not valid for {y}.");
 	options.ModelBindingMessageProvider.SetMissingKeyOrValueAccessor(
 		() => $"A value is required.");
+
+	options.CacheProfiles.Add("NoCache", new CacheProfile()
+	{
+		NoStore = true
+	});
+	options.CacheProfiles.Add("Any-60", new CacheProfile()
+	{
+		Location = ResponseCacheLocation.Any,
+		Duration = 60
+	});
 });
 
 
@@ -136,6 +146,18 @@ else
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthorization();
+
+app.Use((context, next) =>
+{
+	//context.Response.Headers["cache-control"] = "no-cache, no-store";
+	context.Response.GetTypedHeaders().CacheControl =
+	new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+	{
+		NoCache = true,
+		NoStore = true
+	};
+	return next.Invoke();
+});
 
 app.MapGet("/error", 
 	[EnableCors("AnyOrigin")]
