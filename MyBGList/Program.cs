@@ -159,6 +159,20 @@ app.MapGet("/error",
 		return Results.Problem(details);
 	});
 
+
+app.MapGet("/cache/test/1",
+	[EnableCors("AnyOrigin")] (HttpContext context) =>
+	{
+		context.Response.Headers["cache-control"] = "no-cache, no-store";
+		return Results.Ok();
+	});
+
+app.MapGet("/cache/test/2",
+	[EnableCors("AnyOrigin")] (HttpContext context) =>
+	{
+		return Results.Ok();
+	});
+
 app.MapGet("/error/test", 
 	[EnableCors("AnyOrigin")]
 	[ResponseCache(NoStore = true)] () => 
