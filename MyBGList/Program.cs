@@ -111,6 +111,7 @@ builder.Services.AddResponseCaching(options =>
 	options.SizeLimit = 50 * 1024 * 1024;
 });
 
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
