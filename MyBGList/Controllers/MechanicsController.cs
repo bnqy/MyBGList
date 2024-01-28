@@ -6,6 +6,9 @@ using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
 using MyBGList.Attributes;
+using Microsoft.Extensions.Caching.Distributed;
+using MyBGList.Extensions;
+using System.Text.Json;
 
 namespace MyBGList.Controllers
 {
@@ -17,12 +20,17 @@ namespace MyBGList.Controllers
 
 		private readonly ILogger<MechanicsController> _logger;
 
+		private readonly IDistributedCache _distributedCache;
+
+
 		public MechanicsController(
 			ApplicationDbContext context,
-			ILogger<MechanicsController> logger)
+			ILogger<MechanicsController> logger,
+			IDistributedCache distributedCache)
 		{
 			_context = context;
 			_logger = logger;
+			_distributedCache = distributedCache;
 		}
 
 		[HttpGet(Name = "GetMechanics")]
@@ -34,7 +42,13 @@ namespace MyBGList.Controllers
 			var query = _context.Mechanics.AsQueryable();
 			if (!string.IsNullOrEmpty(input.FilterQuery))
 				query = query.Where(b => b.Name.Contains(input.FilterQuery));
+
 			var recordCount = await query.CountAsync();
+
+			Mechanic[]? result = null;
+
+			var cacheKey = $"{input.GetType()}-{JsonSerializer.Serialize(input)}";
+
 			query = query
 					.OrderBy($"{input.SortColumn} {input.SortOrder}")
 					.Skip(input.PageIndex * input.PageSize)
