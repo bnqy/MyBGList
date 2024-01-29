@@ -49,14 +49,20 @@ namespace MyBGList.Controllers
 
 			var cacheKey = $"{input.GetType()}-{JsonSerializer.Serialize(input)}";
 
-			query = query
+			if (!_distributedCache.TryGetValue<Mechanic[]>(cacheKey, out result))
+			{
+				query = query
 					.OrderBy($"{input.SortColumn} {input.SortOrder}")
 					.Skip(input.PageIndex * input.PageSize)
 					.Take(input.PageSize);
 
+				result = await query.ToArrayAsync();
+				_distributedCache.Set(cacheKey, result, new TimeSpan(0, 0, 30));
+			}
+
 			return new RestDTO<Mechanic[]>()
 			{
-				Data = await query.ToArrayAsync(),
+				Data = result,
 				PageIndex = input.PageIndex,
 				PageSize = input.PageSize,
 				RecordCount = recordCount,
