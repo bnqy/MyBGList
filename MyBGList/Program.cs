@@ -7,6 +7,7 @@ using MyBGList.Swagger;
 using MyBGList.Constants;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlServer(
 		builder.Configuration.GetConnectionString("DefaultConnection"))
 	);
+
+builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
+{
+	options.Password.RequireDigit = true;
+	options.Password.RequireLowercase = true;
+	options.Password.RequireUppercase = true;
+	options.Password.RequireNonAlphanumeric = true;
+	options.Password.RequiredLength = 12;
+})
+	.AddEntityFrameworkStores<ApplicationDbContext>();
 
 // replaced by [ManualValidationFilterAttribute]
 //builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
