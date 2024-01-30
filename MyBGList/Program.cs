@@ -206,6 +206,7 @@ app.UseCors();
 
 app.UseResponseCaching();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.Use((context, next) =>
