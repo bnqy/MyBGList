@@ -27,6 +27,7 @@ namespace MyBGList.Controllers
 			_env = env;
 		}
 
+		[Authorize]
 		[HttpPut(Name = "Seed")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]

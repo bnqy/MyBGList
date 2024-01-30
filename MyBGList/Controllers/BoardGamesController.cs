@@ -10,6 +10,7 @@ using MyBGList.Attributes;
 using MyBGList.Constants;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyBGList.Controllers;
 
@@ -115,6 +116,8 @@ public class BoardGamesController : ControllerBase
 		};
 	}
 
+
+	[Authorize]
 	[HttpPost(Name = "UpdateBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
@@ -152,6 +155,7 @@ public class BoardGamesController : ControllerBase
 		};
 	}
 
+	[Authorize]
 	[HttpDelete(Name ="DeleteBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]

@@ -9,6 +9,7 @@ using MyBGList.Attributes;
 using Microsoft.Extensions.Caching.Distributed;
 using MyBGList.Extensions;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyBGList.Controllers
 {
@@ -79,6 +80,7 @@ namespace MyBGList.Controllers
 			};
 		}
 
+		[Authorize]
 		[HttpPost(Name = "UpdateMechanic")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]
@@ -113,6 +115,7 @@ namespace MyBGList.Controllers
 			};
 		}
 
+		[Authorize]
 		[HttpDelete(Name = "DeleteMechanic")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]

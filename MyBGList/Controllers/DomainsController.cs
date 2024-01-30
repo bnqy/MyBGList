@@ -8,6 +8,7 @@ using MyBGList.Attributes;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyBGList.Controllers;
 
@@ -80,6 +81,7 @@ public class DomainsController : ControllerBase
 		};
 	}
 
+	[Authorize]
 	[HttpPost(Name = "UpdateDomain")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
@@ -114,6 +116,7 @@ public class DomainsController : ControllerBase
 		};
 	}
 
+	[Authorize]
 	[HttpDelete(Name = "DeleteDomain")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
