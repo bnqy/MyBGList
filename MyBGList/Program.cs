@@ -8,6 +8,8 @@ using MyBGList.Constants;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,6 +115,29 @@ builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
 })
 	.AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme =
+	options.DefaultChallengeScheme =
+	options.DefaultForbidScheme =
+	options.DefaultScheme =
+	options.DefaultSignInScheme =
+	options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+	.AddJwtBearer(options =>
+	{
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateIssuerSigningKey = true,
+			//RequireExpirationTime = true,
+			ValidIssuer = builder.Configuration["JWT:Issuer"],
+			ValidAudience = builder.Configuration["JWT:Audience"],
+			IssuerSigningKey = new SymmetricSecurityKey(
+				System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
+		};
+	});
 // replaced by [ManualValidationFilterAttribute]
 //builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
