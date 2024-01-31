@@ -117,7 +117,7 @@ public class BoardGamesController : ControllerBase
 	}
 
 
-	[Authorize]
+	[Authorize(Roles = RoleNames.Moderator)]
 	[HttpPost(Name = "UpdateBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
@@ -155,7 +155,7 @@ public class BoardGamesController : ControllerBase
 		};
 	}
 
-	[Authorize]
+	[Authorize(Roles = RoleNames.Administrator)]
 	[HttpDelete(Name ="DeleteBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]

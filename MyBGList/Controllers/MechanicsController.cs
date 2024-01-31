@@ -10,6 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using MyBGList.Extensions;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using MyBGList.Constants;
 
 namespace MyBGList.Controllers
 {
@@ -80,7 +81,7 @@ namespace MyBGList.Controllers
 			};
 		}
 
-		[Authorize]
+		[Authorize(Roles = RoleNames.Moderator)]
 		[HttpPost(Name = "UpdateMechanic")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]
@@ -115,7 +116,7 @@ namespace MyBGList.Controllers
 			};
 		}
 
-		[Authorize]
+		[Authorize(Roles = RoleNames.Administrator)]
 		[HttpDelete(Name = "DeleteMechanic")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]
