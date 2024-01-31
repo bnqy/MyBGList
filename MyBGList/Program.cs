@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -287,6 +288,14 @@ app.MapGet("/error/test",
 	[EnableCors("AnyOrigin")]
 	[ResponseCache(NoStore = true)] () => 
 	{ throw new Exception("test"); });
+
+app.MapGet("/auth/test/1",
+	[Authorize] [EnableCors("AnyOrigin")] [ResponseCache(NoStore = true)] () =>
+	{
+		return Results.Ok("You are authorized!");
+	});
+
+
 
 app.MapGet("/cod/test",
 	[EnableCors("AnyOrigin")]
