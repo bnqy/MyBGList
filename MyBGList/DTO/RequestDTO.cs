@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
+//using System.ComponentModel;
+using DefaultValueAttribute = System.ComponentModel.DefaultValueAttribute; // fixes ambiguous ref [defaultval] atr
 using MyBGList.Attributes;
 
 namespace MyBGList.DTO;
