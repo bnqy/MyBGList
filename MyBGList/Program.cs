@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -165,6 +166,15 @@ builder.Services.AddAuthentication(options =>
 				System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
 		};
 	});
+
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("ModeratorWithMobilePhone", policy =>
+	policy
+	.RequireClaim(ClaimTypes.Role, RoleNames.Moderator)
+	.RequireClaim(ClaimTypes.MobilePhone)); 
+});
+
 // replaced by [ManualValidationFilterAttribute]
 //builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
@@ -295,7 +305,17 @@ app.MapGet("/auth/test/1",
 		return Results.Ok("You are authorized!");
 	});
 
+app.MapGet("/auth/test/2", 
+	[Authorize(Roles = RoleNames.Moderator)] [EnableCors("AnyOrigin")] [ResponseCache(NoStore = true)] () =>
+	{
+		return Results.Ok("You are authorized!");
+	});
 
+app.MapGet("/auth/test/3",
+	[Authorize(Roles = RoleNames.Administrator)][EnableCors("AnyOrigin")][ResponseCache(NoStore = true)] () =>
+	{
+		return Results.Ok("You are authorized!");
+	});
 
 app.MapGet("/cod/test",
 	[EnableCors("AnyOrigin")]

@@ -156,7 +156,7 @@ public class BoardGamesController : ControllerBase
 	}
 
 	[Authorize(Roles = RoleNames.Administrator)]
-	[HttpDelete(Name ="DeleteBoardGame")]
+	[HttpDelete(Name = "DeleteBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<RestDTO<BoardGame?>> Delete(int id)
@@ -185,6 +185,37 @@ public class BoardGamesController : ControllerBase
 							"self",
 							"DELETE"),
 				}
+		};
+	}
+
+
+	[HttpGet("{id}")]
+	[ResponseCache(CacheProfileName = "Any-60")]
+	public async Task<RestDTO<BoardGame?>> GetBoardGame(int id)
+	{
+		_logger.LogInformation(CustomLogEvents.BoardGamesController_Get, "Get id of BoardGame started!");
+
+		BoardGame? result = null;
+		var cacheKey = $"GetBoardGame-{id}";
+
+		if (!_memoryCache.TryGetValue<BoardGame>(cacheKey, out result))
+		{
+			result = await _context.BoardGames.FirstOrDefaultAsync(bg => bg.Id == id);
+			_memoryCache.Set(cacheKey, result, new TimeSpan(0, 0, 30));
+		}
+
+		return new RestDTO<BoardGame?>()
+		{
+			Data = result,
+			PageIndex = 0,
+			PageSize = 1,
+			RecordCount = result != null ? 1 : 0,
+			Links = new List<LinkDTO>
+			{
+				new LinkDTO(Url.Action(null, "BoardGames", new {id}, Request.Scheme)!, 
+				"self", 
+				"GET")
+			}
 		};
 	}
 }
