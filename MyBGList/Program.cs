@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using MyBGList.GraphQL;
+using MyBGList.gRPC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -143,6 +144,8 @@ builder.Services.AddGraphQLServer()
 	.AddFiltering()
 	.AddSorting();
 
+builder.Services.AddGrpc();
+
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
 {
 	options.Password.RequireDigit = true;
@@ -256,6 +259,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGraphQL();
+app.MapGrpcService<GrpcService>();
 
 app.Use((context, next) =>
 {
