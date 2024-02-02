@@ -48,4 +48,43 @@ public class Mutation
 			await context.SaveChangesAsync();
 		}
 	}
+
+	//domain
+
+	[Serial]
+	[Authorize(Roles = new[] { RoleNames.Moderator })]
+	public async Task<Domain?> UpdateDomain([Service] ApplicationDbContext context,
+		DomainDTO model)
+	{
+		var domain = await context.Domains
+			.Where(b => b.Id == model.Id)
+			.FirstOrDefaultAsync();
+
+		if (domain != null)
+		{
+			if (!string.IsNullOrEmpty(model.Name))
+				domain.Name = model.Name;
+
+			domain.LastModifiedDate = DateTime.Now;
+			context.Domains.Update(domain);
+			await context.SaveChangesAsync();
+		}
+		return domain;
+	}
+
+	[Serial]
+	[Authorize(Roles = new[] { RoleNames.Administrator })]
+	public async Task DeleteDomain([Service] ApplicationDbContext context,
+		int id)
+	{
+		var domain = await context.Domains
+			.Where(b => b.Id == id)
+			.FirstOrDefaultAsync();
+
+		if (domain != null)
+		{
+			context.Domains.Remove(domain);
+			await context.SaveChangesAsync();
+		}
+	}
 }
