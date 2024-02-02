@@ -43,6 +43,9 @@ public class AccountController : ControllerBase
 	/// </summary>
 	/// <param name="input">A DTO containing the user data</param>
 	/// <returns>A 201 - Created Status Code in case of success</returns>
+	/// <response code="201">User has been registered</response>
+	/// <response code="400">Invalid data</response>
+	/// <response code="500">An error occurred</response>
 	[HttpPost]
 	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<ActionResult> Register(RegisterDTO input)
@@ -95,6 +98,9 @@ public class AccountController : ControllerBase
 	/// </summary>
 	/// <param name="input">A DTO containing login info</param>
 	/// <returns>The Bearer Token (JWT)</returns>
+	/// <response code="200">User has been logged in</response>
+	/// <response code="400">Login failed (bad request)</response>
+	/// <response code="401">Login failed (unauthorized)</response>
 	[HttpPost]
 	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<ActionResult> Login(LoginDTO input)
