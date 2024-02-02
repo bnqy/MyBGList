@@ -6,14 +6,23 @@ package Grpc;
 
 service Grpc{
 	rpc GetBoardGame (BoardGameRequest) returns (BoardGameResponce);
+
+	rpc UpdateBoardGame (UpdateBoardGameRequest) returns (BoardGameResponce);
+
 }
 
 message BoardGameRequest {
 	int32 id = 1;
 }
 
+
 message BoardGameResponce{
 	int32 id = 1;
 	string name = 2;
 	int32 year = 3;
+}
+
+message UpdateBoardGameRequest {
+	int32 id = 1;
+	string name = 2;
 }

@@ -34,4 +34,25 @@ public class GrpcService : Grpc.GrpcBase
 
 		return response;
 	}
+
+	public override async Task<BoardGameResponce> UpdateBoardGame(UpdateBoardGameRequest request,
+		ServerCallContext scc)
+	{
+		var bg = await _context.BoardGames
+			.Where(bg => bg.Id == request.Id)
+			.FirstOrDefaultAsync();
+
+		var response = new BoardGameResponce();
+
+		if (bg != null)
+		{
+			bg.Name = request.Name;
+			_context.BoardGames.Update(bg);
+			await _context.SaveChangesAsync();
+			response.Id = bg.Id;
+			response.Name = bg.Name;
+			response.Year = bg.Year;
+		}
+		return response;
+	}
 }
