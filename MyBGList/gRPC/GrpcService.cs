@@ -35,6 +35,7 @@ public class GrpcService : Grpc.GrpcBase
 		return response;
 	}
 
+	[Authorize(Roles = RoleNames.Moderator)]
 	public override async Task<BoardGameResponce> UpdateBoardGame(UpdateBoardGameRequest request,
 		ServerCallContext scc)
 	{

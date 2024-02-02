@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using MyBGList.GraphQL;
 using MyBGList.gRPC;
+using System.Reflection;
+using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +104,10 @@ builder.Services.AddCors(options => {
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options => {
+	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+	options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
+	options.EnableAnnotations();
 	options.ParameterFilter<SortColumnFilter>();
 	options.ParameterFilter<SortOrderFilter>();
 
@@ -315,19 +321,28 @@ app.MapGet("/error/test",
 	{ throw new Exception("test"); });
 
 app.MapGet("/auth/test/1",
-	[Authorize] [EnableCors("AnyOrigin")] [ResponseCache(NoStore = true)] () =>
+	[Authorize] [EnableCors("AnyOrigin")]
+[SwaggerOperation(Summary =  "Auth test #1 (authenticated users).",
+Description = "Returns 200 - OK if called by an authenticated user regardless of its role(s).")]
+[ResponseCache(NoStore = true)] () =>
 	{
 		return Results.Ok("You are authorized!");
 	});
 
 app.MapGet("/auth/test/2", 
-	[Authorize(Roles = RoleNames.Moderator)] [EnableCors("AnyOrigin")] [ResponseCache(NoStore = true)] () =>
+	[Authorize(Roles = RoleNames.Moderator)] [EnableCors("AnyOrigin")]
+[SwaggerOperation(Summary = "Auth test #2 (Moderator role).",
+Description = "Returns 200 - OK if called by a Moderator role(s).")]
+[ResponseCache(NoStore = true)] () =>
 	{
 		return Results.Ok("You are authorized!");
 	});
 
 app.MapGet("/auth/test/3",
-	[Authorize(Roles = RoleNames.Administrator)][EnableCors("AnyOrigin")][ResponseCache(NoStore = true)] () =>
+	[Authorize(Roles = RoleNames.Administrator)]
+[SwaggerOperation(Summary = "Auth test #2 (Admin role).",
+Description = "Returns 200 - OK if called by a Admin role(s).")]
+[EnableCors("AnyOrigin")][ResponseCache(NoStore = true)] () =>
 	{
 		return Results.Ok("You are authorized!");
 	});

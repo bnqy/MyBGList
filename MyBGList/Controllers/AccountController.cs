@@ -37,6 +37,12 @@ public class AccountController : ControllerBase
 		_signInManager = signInManager;
 	}
 
+
+	/// <summary>
+	/// Registers a new user
+	/// </summary>
+	/// <param name="input">A DTO containing the user data</param>
+	/// <returns>A 201 - Created Status Code in case of success</returns>
 	[HttpPost]
 	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<ActionResult> Register(RegisterDTO input)
@@ -83,6 +89,12 @@ public class AccountController : ControllerBase
 		}
 	}
 
+
+	/// <summary>
+	/// Logins the user
+	/// </summary>
+	/// <param name="input">A DTO containing login info</param>
+	/// <returns>The Bearer Token (JWT)</returns>
 	[HttpPost]
 	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<ActionResult> Login(LoginDTO input)
@@ -139,7 +151,5 @@ public class AccountController : ControllerBase
 			return StatusCode(StatusCodes.Status401Unauthorized,
 				exceptionDetails); 
 		}
-
-		throw new NotImplementedException();
 	}
 }

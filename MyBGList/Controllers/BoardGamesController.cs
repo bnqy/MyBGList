@@ -11,6 +11,7 @@ using MyBGList.Constants;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MyBGList.Controllers;
 
@@ -73,7 +74,10 @@ public class BoardGamesController : ControllerBase
 	[HttpGet(Name = "GetBoardGames")]
 	//[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	[ResponseCache(CacheProfileName = "Any-60")]
-	public async Task<RestDTO<BoardGame[]>> Get([FromQuery] RequestDTO<BoardGameDTO> input)
+	[SwaggerOperation(Summary = "Get a list of Board Games.",
+		Description = "Retrieves a list of board games with custom paging, sorting, and filtering rules.")]
+	public async Task<RestDTO<BoardGame[]>> Get([FromQuery] 
+	[SwaggerParameter("A DTO object that can be used to customize some retrieval parameters.")] RequestDTO<BoardGameDTO> input)
 	{
 		_logger.LogInformation(CustomLogEvents.BoardGamesController_Get, "GET method started!");
 
@@ -121,6 +125,8 @@ public class BoardGamesController : ControllerBase
 	[HttpPost(Name = "UpdateBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
+	[SwaggerOperation(Summary = "Updates a board game data",
+		Description = "Updates board game data in database")]
 	public async Task<RestDTO<BoardGame?>> Post(BoardGameDTO model)
 	{
 		var boardgame = await _context.BoardGames
@@ -159,6 +165,8 @@ public class BoardGamesController : ControllerBase
 	[HttpDelete(Name = "DeleteBoardGame")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
+	[SwaggerOperation(Summary = "Deletes a board game by id",
+		Description = "Deletes a board game from database (id)")]
 	public async Task<RestDTO<BoardGame?>> Delete(int id)
 	{
 		var boardgame = await _context.BoardGames
@@ -191,6 +199,8 @@ public class BoardGamesController : ControllerBase
 
 	[HttpGet("{id}")]
 	[ResponseCache(CacheProfileName = "Any-60")]
+	[SwaggerOperation(Summary = "Get a board game by id",
+		Description = "Retrieves a board game by given id")]
 	public async Task<RestDTO<BoardGame?>> GetBoardGame(int id)
 	{
 		_logger.LogInformation(CustomLogEvents.BoardGamesController_Get, "Get id of BoardGame started!");
