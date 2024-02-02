@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using MyBGList.GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -134,6 +135,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		builder.Configuration.GetConnectionString("DefaultConnection"))
 	);
 
+builder.Services.AddGraphQLServer()
+	.AddAuthorization()
+	.AddQueryType<Query>()
+	.AddMutationType<Mutation>()
+	.AddProjections()
+	.AddFiltering()
+	.AddSorting();
+
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
 {
 	options.Password.RequireDigit = true;
@@ -245,6 +254,8 @@ app.UseResponseCaching();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGraphQL();
 
 app.Use((context, next) =>
 {
