@@ -87,4 +87,42 @@ public class Mutation
 			await context.SaveChangesAsync();
 		}
 	}
+
+	//mechanics
+	[Serial]
+	[Authorize(Roles = new[] { RoleNames.Moderator })]
+	public async Task<Mechanic?> UpdateMechanic([Service] ApplicationDbContext context,
+		MechanicDTO model)
+	{
+		var mechanic = await context.Mechanics
+			.Where(b => b.Id == model.Id)
+			.FirstOrDefaultAsync();
+
+		if (mechanic != null)
+		{
+			if (!string.IsNullOrEmpty(model.Name))
+				mechanic.Name = model.Name;
+
+			mechanic.LastModifiedDate = DateTime.Now;
+			context.Mechanics.Update(mechanic);
+			await context.SaveChangesAsync();
+		}
+		return mechanic;
+	}
+
+	[Serial]
+	[Authorize(Roles = new[] { RoleNames.Administrator })]
+	public async Task DeleteMechanic([Service] ApplicationDbContext context,
+		int id)
+	{
+		var mechanic = await context.Mechanics
+			.Where(b => b.Id == id)
+			.FirstOrDefaultAsync();
+
+		if (mechanic != null)
+		{
+			context.Mechanics.Remove(mechanic);
+			await context.SaveChangesAsync();
+		}
+	}
 }
