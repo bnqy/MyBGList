@@ -17,6 +17,7 @@ using MyBGList.GraphQL;
 using MyBGList.gRPC;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Annotations;
+using MyBGList.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,11 +122,14 @@ builder.Services.AddSwaggerGen(options => {
 		Scheme = "bearer"
 	});
 
-	options.AddSecurityRequirement(new OpenApiSecurityRequirement
+	/*options.AddSecurityRequirement(new OpenApiSecurityRequirement
 	{
 		{
 			new OpenApiSecurityScheme
 			{
+				Name = "Bearer",
+				In = ParameterLocation.Header,
+
 				Reference = new OpenApiReference
 				{
 					Type=ReferenceType.SecurityScheme,
@@ -134,7 +138,12 @@ builder.Services.AddSwaggerGen(options => {
 			},
 			Array.Empty<string>()
 		}
-	});
+	});*/
+
+	options.OperationFilter<AuthRequirementFilter>();
+	options.DocumentFilter<CustomDocumentFilter>();
+	options.RequestBodyFilter<PasswordRequestFilter>();
+	options.SchemaFilter<CustomKeyValueFilter>();
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -322,7 +331,8 @@ app.MapGet("/error/test",
 
 app.MapGet("/auth/test/1",
 	[Authorize] [EnableCors("AnyOrigin")]
-[SwaggerOperation(Summary =  "Auth test #1 (authenticated users).",
+[SwaggerOperation(Tags = new[] {"Auth"},
+Summary =  "Auth test #1 (authenticated users).",
 Description = "Returns 200 - OK if called by an authenticated user regardless of its role(s).")]
 [SwaggerResponse(StatusCodes.Status200OK, "Authorized")]
 [SwaggerResponse(StatusCodes.Status401Unauthorized, "Not authorized")]
@@ -333,7 +343,8 @@ Description = "Returns 200 - OK if called by an authenticated user regardless of
 
 app.MapGet("/auth/test/2", 
 	[Authorize(Roles = RoleNames.Moderator)] [EnableCors("AnyOrigin")]
-[SwaggerOperation(Summary = "Auth test #2 (Moderator role).",
+[SwaggerOperation(Tags = new[] { "Auth" },
+Summary = "Auth test #2 (Moderator role).",
 Description = "Returns 200 - OK if called by a Moderator role(s).")]
 [ResponseCache(NoStore = true)] () =>
 	{
@@ -342,7 +353,8 @@ Description = "Returns 200 - OK if called by a Moderator role(s).")]
 
 app.MapGet("/auth/test/3",
 	[Authorize(Roles = RoleNames.Administrator)]
-[SwaggerOperation(Summary = "Auth test #2 (Admin role).",
+[SwaggerOperation(Tags = new[] { "Auth" }, 
+Summary = "Auth test #2 (Admin role).", 
 Description = "Returns 200 - OK if called by a Admin role(s).")]
 [EnableCors("AnyOrigin")][ResponseCache(NoStore = true)] () =>
 	{

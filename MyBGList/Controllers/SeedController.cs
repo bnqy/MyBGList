@@ -15,6 +15,7 @@ namespace MyBGList.Controllers;
 [Authorize(Roles = RoleNames.Administrator)]
 [Route("[controller]/[action]")]
 [ApiController]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class SeedController : ControllerBase
 {
 	private readonly ApplicationDbContext _context;
