@@ -11,6 +11,7 @@ using MyBGList.Extensions;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using MyBGList.Constants;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MyBGList.Controllers
 {
@@ -38,8 +39,12 @@ namespace MyBGList.Controllers
 		[HttpGet(Name = "GetMechanics")]
 		//[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 		[ResponseCache(CacheProfileName = "Any-60")]
+		[SwaggerOperation(Summary = "Gets a list of mechanics",
+			Description = "Retrieves a list of mechanics with custom\r\npaging, sorting, and filtering rules")]
 		public async Task<RestDTO<Mechanic[]>> Get(
-			[FromQuery] RequestDTO<MechanicDTO> input)
+			[FromQuery]
+		[SwaggerParameter("A DTO object that can be used to customize\r\nsome retrieval parameters")]
+		RequestDTO<MechanicDTO> input)
 		{
 			var query = _context.Mechanics.AsQueryable();
 			if (!string.IsNullOrEmpty(input.FilterQuery))

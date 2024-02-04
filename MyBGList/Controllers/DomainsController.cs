@@ -26,6 +26,12 @@ public class DomainsController : ControllerBase
 		_logger = logger;
 	}
 
+	/// <summary>
+	/// Gets a list of domains
+	/// </summary>
+	/// <remarks>Retrieves a list of domains with custom paging, sorting, and filtering rules</remarks>>
+	/// <param name="input"> A DTO object that can be used to customize some retrieval parameters</param>
+	/// <returns>A RestDTO object containing a list of domains</returns>
 	[HttpGet(Name = "GetDomains")]
 	//[ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
 	[ResponseCache(CacheProfileName = "Any-60")]
@@ -83,6 +89,7 @@ public class DomainsController : ControllerBase
 	}
 
 	[Authorize(Roles = RoleNames.Moderator)]
+	[ApiExplorerSettings(IgnoreApi = true)]
 	[HttpPost(Name = "UpdateDomain")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
@@ -119,6 +126,7 @@ public class DomainsController : ControllerBase
 
 	[Authorize(Roles = RoleNames.Administrator)]
 	[HttpDelete(Name = "DeleteDomain")]
+	[ApiExplorerSettings(IgnoreApi = true)]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
 	public async Task<RestDTO<Domain?>> Delete(int id)
