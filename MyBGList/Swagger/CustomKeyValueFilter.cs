@@ -7,13 +7,9 @@ namespace MyBGList.Attributes
 {
 	public class CustomKeyValueFilter : ISchemaFilter
 	{
-		public void Apply(
-			OpenApiSchema schema,
-			SchemaFilterContext context)
+		public void Apply(OpenApiSchema schema, SchemaFilterContext context)
 		{
-			var caProvider = context.MemberInfo
-				?? context.ParameterInfo
-				as ICustomAttributeProvider;
+			var caProvider = context.MemberInfo ?? context.ParameterInfo as ICustomAttributeProvider;
 
 			var attributes = caProvider?
 				.GetCustomAttributes(true)
@@ -23,8 +19,7 @@ namespace MyBGList.Attributes
 			{
 				foreach (var attribute in attributes)
 				{
-					schema.Extensions.Add(
-						attribute.Key,
+					schema.Extensions.Add(attribute.Key,
 						new OpenApiString(attribute.Value)
 						);
 				}

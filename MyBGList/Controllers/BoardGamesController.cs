@@ -201,7 +201,7 @@ public class BoardGamesController : ControllerBase
 	[ResponseCache(CacheProfileName = "Any-60")]
 	[SwaggerOperation(Summary = "Get a board game by id",
 		Description = "Retrieves a board game by given id")]
-	public async Task<RestDTO<BoardGame?>> GetBoardGame(int id)
+	public async Task<RestDTO<BoardGame?>> GetBoardGame([CustomKeyValue("x-test-3", "value 3")] int id)
 	{
 		_logger.LogInformation(CustomLogEvents.BoardGamesController_Get, "Get id of BoardGame started!");
 
