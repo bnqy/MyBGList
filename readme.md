@@ -2,7 +2,7 @@
 **This API serves as a central hub for retrieving comprehensive data on a wide range of board games.**
 
 <a href="https://github.com/bnqy/MyBGList">
-    <img src="https://img.shields.io/github.com/bnqy/MyBGList?style=social">
+    <img src="https://img.shields.io/github/stars/bnqy/MyBGList?style=social">
 </a> 
 
 ---
