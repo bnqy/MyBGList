@@ -90,7 +90,9 @@ namespace MyBGList.Controllers
 		[HttpPost(Name = "UpdateMechanic")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]
-		public async Task<RestDTO<Mechanic?>> Post(MechanicDTO model)
+		[SwaggerOperation(Summary = "Updates the mechanics data", 
+			Description = "Updates mechanics data in DB")]
+		public async Task<RestDTO<Mechanic?>> Post([SwaggerParameter("Mechanic DTO object contains mechanic data")] MechanicDTO model)
 		{
 			var mechanic = await _context.Mechanics
 				.Where(b => b.Id == model.Id)
@@ -125,7 +127,9 @@ namespace MyBGList.Controllers
 		[HttpDelete(Name = "DeleteMechanic")]
 		//[ResponseCache(NoStore = true)]
 		[ResponseCache(CacheProfileName = "NoCache")]
-		public async Task<RestDTO<Mechanic?>> Delete(int id)
+		[SwaggerOperation(Summary = "Deletes mechanic data", 
+			Description = "Deletes mechanic data in DB by id")]
+		public async Task<RestDTO<Mechanic?>> Delete([SwaggerParameter("id of mechanic data in DB")] int id)
 		{
 			var mechanic = await _context.Mechanics
 				.Where(b => b.Id == id)

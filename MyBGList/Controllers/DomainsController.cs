@@ -10,6 +10,7 @@ using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using MyBGList.Constants;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MyBGList.Controllers;
 
@@ -93,7 +94,10 @@ public class DomainsController : ControllerBase
 	[HttpPost(Name = "UpdateDomain")]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
-	public async Task<RestDTO<Domain?>> Post(DomainDTO model)
+	[SwaggerOperation(Summary = "Updates domain data", Description = "Updates domain table in DB")]
+	public async Task<RestDTO<Domain?>> Post(
+		[SwaggerParameter("DTO object contains domain data")]
+		DomainDTO model)
 	{
 		var domain = await _context.Domains
 			.Where(b => b.Id == model.Id)
@@ -129,7 +133,8 @@ public class DomainsController : ControllerBase
 	[ApiExplorerSettings(IgnoreApi = true)]
 	//[ResponseCache(NoStore = true)]
 	[ResponseCache(CacheProfileName = "NoCache")]
-	public async Task<RestDTO<Domain?>> Delete(int id)
+	[SwaggerOperation(Summary = "Deletes domain data", Description = "Deletes domain data in DB by id")]
+	public async Task<RestDTO<Domain?>> Delete([SwaggerParameter("id of domain data in DB")] int id)
 	{
 		var domain = await _context.Domains
 			.Where(b => b.Id == id)
